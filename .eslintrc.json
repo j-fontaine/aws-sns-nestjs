@@ -1,0 +1,67 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:import/errors",
+    "plugin:jest/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "prettier",
+    "prettier/@typescript-eslint"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "tsconfig.json",
+    "sourceType": "module"
+  },
+  "env": {
+    "node": true,
+    "jest/globals": true
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"],
+        "paths": ["src", ".", "node_modules"]
+      }
+    }
+  },
+  "plugins": ["prettier", "@typescript-eslint", "@typescript-eslint/eslint-plugin", "jest"],
+  "ignorePatterns": ["node_modules/", "dist/", "coverage/", ".cache", ".vscode", "build"],
+  "rules": {
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ],
+    "no-use-before-define": "off",
+    "indent": [
+      "warn",
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "max-len": ["error", { "code": 180, "ignoreUrls": true, "ignoreTrailingComments": true }],
+    "max-statements-per-line": "error",
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "optionalDependencies": false,
+        "peerDependencies": false
+      }
+    ],
+    "linebreak-style": "off",
+    "curly": ["error", "all"],
+    "comma-dangle": ["error", "always-multiline"],
+    "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/no-var-requires": "warn",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/camelcase": "off",
+    "@typescript-eslint/no-use-before-define": "off"
+  }
+}
