@@ -1,4 +1,4 @@
-import { MessageAttributeMap } from "aws-sdk/clients/sns";
+import { MessageAttributeMap } from 'aws-sdk/clients/sns';
 
 export class SnsNotification {
   Type: string;

@@ -8,12 +8,11 @@ import { SnsListenerModule } from './aws/sns/sns-listener/sns-listener.module';
   imports: [
     ConfigModule.forRoot({
       envFilePath: ['.env.local', 'env.development'],
-      isGlobal: true,
+      isGlobal: true
     }),
-    SnsListenerModule,
+    SnsListenerModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService]
 })
-export class AppModule {
-}
+export class AppModule {}

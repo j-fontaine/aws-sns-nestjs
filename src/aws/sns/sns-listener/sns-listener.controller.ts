@@ -1,9 +1,9 @@
-import { Controller, Get, HttpCode, HttpStatus, Param, Post, Body, Query } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus, Post, Body, Query } from '@nestjs/common';
 import { SnsListenerService } from './sns-listener.service';
 
 @Controller('sns-listener')
 export class SnsListenerController {
-  constructor(private readonly snsListenerService: SnsListenerService) { }
+  constructor(private readonly snsListenerService: SnsListenerService) {}
 
   @Get('/status')
   reportStatus(): string {
@@ -13,13 +13,13 @@ export class SnsListenerController {
   @Get('/connect')
   @HttpCode(HttpStatus.ACCEPTED)
   connectSNS(@Query('arn') arn: string): void {
-    console.log("Received subscribe message");
+    console.log('Received subscribe message');
     this.snsListenerService.subscribeToSNS(arn);
   }
 
   /**
-   * @param body is being translated from a text/plain UTF-8 encoding to 
-   * something that can be consumed via an express body-parser change 
+   * @param body is being translated from a text/plain UTF-8 encoding to
+   * something that can be consumed via an express body-parser change
    * in the main.ts implementation
    */
   @Post()

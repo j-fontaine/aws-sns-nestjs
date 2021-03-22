@@ -5,7 +5,6 @@ import { SnsAuthService } from './sns-auth.service';
   controllers: [],
   providers: [SnsAuthService],
   imports: [],
-  exports: [SnsAuthService],
+  exports: [SnsAuthService]
 })
-export class SnsAuthModule {
-}
+export class SnsAuthModule {}

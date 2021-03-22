@@ -6,19 +6,9 @@ import { SnsListenerController } from './sns-listener.controller';
 import { SnsListenerService } from './sns-listener.service';
 
 @Module({
-  imports: [
-    HttpModule,
-    SnsAuthModule,
-  ],
+  imports: [HttpModule, SnsAuthModule],
   controllers: [SnsListenerController],
-  providers: [
-    SnsListenerService,
-    ConfirmationHandlerService,
-    NotificationHandlerService,
-  ],
-  exports: [],
-
+  providers: [SnsListenerService, ConfirmationHandlerService, NotificationHandlerService],
+  exports: []
 })
-export class SnsListenerModule {
-
-}
+export class SnsListenerModule {}
