@@ -1,11 +1,19 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { SnsListenerModule } from './aws/sns-listener/sns-listener.module';
+import { ConfigModule } from '@nestjs/config';
+import { SnsListenerModule } from './aws/sns/sns-listener/sns-listener.module';
 
 @Module({
-  imports: [SnsListenerModule],
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: ['.env.local', 'env.development'],
+      isGlobal: true,
+    }),
+    SnsListenerModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {
+}

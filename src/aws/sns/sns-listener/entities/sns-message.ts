@@ -1,3 +1,5 @@
+import { MessageAttributeMap } from "aws-sdk/clients/sns";
+
 export class SnsNotification {
   Type: string;
   MessageId: string;
@@ -9,4 +11,5 @@ export class SnsNotification {
   SignatureVersion: number;
   Signature: string;
   SigningCertURL: string;
+  MessageAttributes: MessageAttributeMap;
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, HttpCode, HttpStatus, Param, Post, Body } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus, Param, Post, Body, Query } from '@nestjs/common';
 import { SnsListenerService } from './sns-listener.service';
 
 @Controller('sns-listener')
@@ -12,9 +12,9 @@ export class SnsListenerController {
 
   @Get('/connect')
   @HttpCode(HttpStatus.ACCEPTED)
-  connectSNS(@Param('arn') _arn: string): void {
+  connectSNS(@Query('arn') arn: string): void {
     console.log("Received subscribe message");
-    this.snsListenerService.subscribeToSNS(_arn);
+    this.snsListenerService.subscribeToSNS(arn);
   }
 
   /**

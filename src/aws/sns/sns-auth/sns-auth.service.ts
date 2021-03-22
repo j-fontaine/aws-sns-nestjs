@@ -17,6 +17,7 @@ export class SnsAuthService {
   private instance: SNS = null;
 
   getInstance(): SNS {
+    console.log(`CONFIG=${this.myConfig}`);
     if (!this.instance) {
       const fullConfig = new Config(this.myConfig);
       fullConfig.region = "us-gov-west-1";

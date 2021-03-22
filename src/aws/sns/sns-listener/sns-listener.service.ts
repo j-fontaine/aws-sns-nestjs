@@ -3,10 +3,11 @@ import { AWSError } from 'aws-sdk';
 import { SubscribeInput } from 'aws-sdk/clients/sns';
 import { v4 } from 'public-ip';
 import { SnsAuthService } from '../sns-auth/sns-auth.service';
-import { SubscriptionNotificationTypes } from './util/sns-message-types';
 import { SnsNotification } from './entities/sns-message';
-import { NotificationHandlerService } from './handlers/notification-handler/notification-handler.service';
 import { ConfirmationHandlerService } from './handlers/confirmation-handler/confirmation-handler.service';
+import { NotificationHandlerService } from './handlers/notification-handler/notification-handler.service';
+import { SubscriptionNotificationTypes } from '../util/sns-message-types';
+
 
 @Injectable()
 export class SnsListenerService {
@@ -26,9 +27,11 @@ export class SnsListenerService {
     v4().then((ip) => {
       const params: SubscribeInput = {
         Protocol: 'http',
-        // TopicArn: topicArn,
-        TopicArn: "arn:aws-us-gov:sns:us-gov-west-1:288437831781:lead-topic",
-        Endpoint: `http://dba0a3479fed.ngrok.io/sns-listener`,
+        TopicArn: topicArn,
+        Endpoint: `http://${ip}/sns-listener`,
+      }
+      if (process.env.NODE_ENV == 'development') {
+        params.Endpoint = `http://${process.env.DEV_ADDR}/sns-listener`
       }
       this.snsAuthService.getInstance().subscribe(params, (error: AWSError) => {
         if (error) {
