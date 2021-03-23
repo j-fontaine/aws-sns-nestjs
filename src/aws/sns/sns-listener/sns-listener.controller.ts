@@ -25,7 +25,7 @@ export class SnsListenerController {
   @Post()
   notificationInbox(@Body() body: string): void {
     console.log('Received Notification');
-    this.snsListenerService.routeNotification(JSON.parse(body));
+    this.snsListenerService.processNotification(JSON.parse(body));
   }
 
   // @Post()

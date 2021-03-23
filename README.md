@@ -1,75 +1,99 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# AWS SNS Integration utilzing NestJS Javscript Framework
 
-[travis-image]: https://api.travis-ci.org/nestjs/nest.svg?branch=master
-[travis-url]: https://travis-ci.org/nestjs/nest
-[linux-image]: https://img.shields.io/travis/nestjs/nest/master.svg?label=linux
-[linux-url]: https://travis-ci.org/nestjs/nest
-  
-  <p align="center">A progressive <a href="http://nodejs.org" target="blank">Node.js</a> framework for building efficient and scalable server-side applications, heavily inspired by <a href="https://angular.io" target="blank">Angular</a>.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/dm/@nestjs/core.svg" alt="NPM Downloads" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://api.travis-ci.org/nestjs/nest.svg?branch=master" alt="Travis" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://img.shields.io/travis/nestjs/nest/master.svg?label=linux" alt="Linux" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#5" alt="Coverage" /></a>
-<a href="https://gitter.im/nestjs/nestjs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge"><img src="https://badges.gitter.im/nestjs/nestjs.svg" alt="Gitter" /></a>
-<a href="https://opencollective.com/nest#backer"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec"><img src="https://img.shields.io/badge/Donate-PayPal-dc3d53.svg"/></a>
-  <a href="https://twitter.com/nestframework"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Setup
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
+### Dependency Installation
 
 ```bash
-$ npm install
+npm install
 ```
+
+### Environmental Setup
+
+#### Properties (.env)
+
+- Below are some example values for the Local environment file `.env.local`
+- `AWS_REGION` the location of your VPC
+- Anything starting `SNS*` are values that the AWS SDK outline
+- `DEV_ADDR` is only used when attempting to configure the SNS and points the AWS Service to the System being developed. This won't work for localhost for the public AWS without some port forwarding and DNS exposure to the internet.
+- `SVC_PORT` is the port that this application will listen on
+- `NODE_ENV` sets the node environment to something. If not set to `development` there are logic blocks that will no engage.
+
+```properties
+AWS_REGION=us-east-1
+SNS_CONNECT_TIMEOUT=50000
+SNS_TIMEOUT=120000
+SNS_MAX_RETRIES=2
+SNS_API_VERSION=2010-03-31
+DEV_ADDR=locahost
+SVC_PORT=3000
+NODE_ENV=development
+```
+
+#### Credentials
+
+- The AWS SDK will be looking for credentials. These can be set at a system level of .aws/credentials in the user folder, configured by an Environment variable or can be pointed at via the code
+  - Code File configuration needs to be done in `src/aws/sns-provider/SnsProviderService`
+
+```credentials
+[sns_profile]
+aws_access_key_id = 123
+aws_secret_access_key = 1@3%$
+region = us-west-1
+```
+
+## Developing
+
+### Lessons Learned
+
+- In order to properly handle SNS Notifications, the NestJS server needs to be able to parse `text/plain` MIME types into objects. This is accomplished by setting up an `app.use(text())` from the `body-parser` module
+
+### sns-listener
+
+- Contains all of the required components to receive and subscribe to the SNS Topic
+
+#### handlers
+
+- Generic Notification Handler Factory
+- Confirmation Request Handler which will deal with the SNS Subscription confirm request and confirm
+- Notification Request Handler which will deal with all other types of SNS Topic Notifications received.
+  - Plans to expand this into specific message types based on the API contract of the messages
+
+### sns-provider
+
+- WIP: Contains all of the required components to transmit SNS Messages to a Topic
+
+### sns-publisher
+
+- Contains the core SNS service producer that allows authentication and instantiation of the local SNS reference. Limited to a single SNS instance.
+  - Expected to be expanded to include a topic ID to instance map eventually
 
 ## Running the app
 
 ```bash
 # development
-$ npm run start
+npm run start
 
 # watch mode
-$ npm run start:dev
+npm run start:dev
 
 # production mode
-$ npm run start:prod
+npm run start:prod
 ```
 
 ## Test
 
 ```bash
 # unit tests
-$ npm run test
+npm run test
 
 # e2e tests
-$ npm run test:e2e
+npm run test:e2e
 
 # test coverage
-$ npm run test:cov
+npm run test:cov
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
 
-  Nest is [MIT licensed](LICENSE).
+Nest is [MIT licensed](LICENSE).

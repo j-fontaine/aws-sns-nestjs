@@ -2,18 +2,18 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { AWSError } from 'aws-sdk';
 import { SubscribeInput } from 'aws-sdk/clients/sns';
 import { v4 } from 'public-ip';
-import { SnsAuthService } from '../sns-auth/sns-auth.service';
-import { SnsNotification } from './entities/sns-message';
-import { ConfirmationHandlerService } from './handlers/confirmation-handler/confirmation-handler.service';
+import { SnsProviderService } from '../sns-provider/sns-provider.service';
+import { SnsNotification } from './entities/sns-notification';
+import { ConfirmNotificationHandlerService } from './handlers/confirm-notification-handler/confirm-notification-handler.service';
 import { NotificationHandlerService } from './handlers/notification-handler/notification-handler.service';
-import { SubscriptionNotificationTypes } from '../util/sns-message-types';
+import { SNSNotificationTypes } from './util/sns-notification-types';
 
 @Injectable()
 export class SnsListenerService {
   constructor(
-    private readonly snsAuthService: SnsAuthService,
+    private readonly snsProviderService: SnsProviderService,
     private readonly notificationHandler: NotificationHandlerService,
-    private readonly confirmationHandler: ConfirmationHandlerService
+    private readonly confirmationHandler: ConfirmNotificationHandlerService
   ) {}
 
   private status = 'Not ready';
@@ -32,7 +32,7 @@ export class SnsListenerService {
       if (process.env.NODE_ENV == 'development') {
         params.Endpoint = `http://${process.env.DEV_ADDR}/sns-listener`;
       }
-      this.snsAuthService.getInstance().subscribe(params, (error: AWSError) => {
+      this.snsProviderService.getInstance().subscribe(params, (error: AWSError) => {
         if (error) {
           console.log(error, error.stack);
           this.status = 'Error';
@@ -44,13 +44,13 @@ export class SnsListenerService {
     });
   }
 
-  routeNotification(message: SnsNotification): string {
+  processNotification(message: SnsNotification): string {
     console.log(message);
     switch (message.Type) {
-      case SubscriptionNotificationTypes.NOTIFICATION:
+      case SNSNotificationTypes.NOTIFICATION:
         this.notificationHandler.handle(message);
         break;
-      case SubscriptionNotificationTypes.SUBSCRIPTION_CONFIRMATION:
+      case SNSNotificationTypes.SUBSCRIPTION_CONFIRMATION:
         this.confirmationHandler.handle(message);
         break;
       default:

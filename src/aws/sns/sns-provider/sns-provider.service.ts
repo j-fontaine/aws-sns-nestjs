@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Config, SharedIniFileCredentials, SNS } from 'aws-sdk';
 
 @Injectable()
-export class SnsAuthService {
+export class SnsProviderService {
   private myConfig = {
     apiVersion: process.env.SNS_API_VERSION,
     maxRetries: Number(process.env.SNS_MAX_RETIRES),

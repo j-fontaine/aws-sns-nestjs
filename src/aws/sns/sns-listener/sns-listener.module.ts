@@ -1,14 +1,13 @@
 import { HttpModule, Module } from '@nestjs/common';
-import { SnsAuthModule } from '../sns-auth/sns-auth.module';
-import { ConfirmationHandlerService } from './handlers/confirmation-handler/confirmation-handler.service';
-import { NotificationHandlerService } from './handlers/notification-handler/notification-handler.service';
+import { SnsAuthModule } from '../sns-provider/sns-provider.module';
 import { SnsListenerController } from './sns-listener.controller';
 import { SnsListenerService } from './sns-listener.service';
+import { HandlersModule } from './handlers/handlers.module';
 
 @Module({
-  imports: [HttpModule, SnsAuthModule],
+  imports: [HttpModule, SnsAuthModule, HandlersModule],
   controllers: [SnsListenerController],
-  providers: [SnsListenerService, ConfirmationHandlerService, NotificationHandlerService],
+  providers: [SnsListenerService],
   exports: []
 })
 export class SnsListenerModule {}

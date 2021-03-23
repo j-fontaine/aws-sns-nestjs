@@ -1,8 +1,9 @@
 import { HttpService, Injectable, NotFoundException } from '@nestjs/common';
-import { SnsNotification } from '../../entities/sns-message';
+import { SnsNotification } from '../../entities/sns-notification';
+import { NotificationHandlerInterface } from '../notification-handler-factory/notification-handler-interface';
 
 @Injectable()
-export class ConfirmationHandlerService {
+export class ConfirmNotificationHandlerService implements NotificationHandlerInterface {
   constructor(private readonly httpService: HttpService) {}
 
   handle(notification: SnsNotification): void {
